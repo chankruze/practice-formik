@@ -12,7 +12,7 @@ import Label from "./Label";
 
 const Select = ({ id, name, label, options }) => {
   return (
-    <div className="flex-1 px-2 flex items-center">
+    <div className="my-1 flex-1 flex items-center">
       <Label htmlFor={id} value={label} />
       <Field
         id={id}

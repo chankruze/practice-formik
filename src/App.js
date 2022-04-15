@@ -11,30 +11,43 @@ const optionData = [
   {
     label: "Option A",
     value: "",
-    answer: 0,
   },
   {
     label: "Option B",
     value: "",
-    answer: 1,
   },
   {
     label: "Option C",
     value: "",
-    answer: 2,
   },
   {
     label: "Option D",
     value: "",
-    answer: 3,
   },
 ];
 
-const questionData = {
-  title: "",
-  options: optionData,
-  answer: 0,
-};
+const correctOptionData = [
+  {
+    label: "-- Select Correct Option --",
+    value: "",
+  },
+  {
+    label: "Option A",
+    value: 0,
+  },
+  {
+    label: "Option B",
+    value: 1,
+  },
+  {
+    label: "Option C",
+    value: 2,
+  },
+  {
+    label: "Option D",
+    value: 3,
+  },
+];
 
 const semesters = [
   {
@@ -102,6 +115,12 @@ const branches = [
   },
 ];
 
+const questionData = {
+  title: "",
+  options: optionData,
+  answer: "",
+};
+
 const App = () => {
   const initialValues = {
     title: "",
@@ -116,6 +135,19 @@ const App = () => {
     description: Yup.string().required("Description is required"),
     semester: Yup.string().required("Semester is required"),
     branch: Yup.string().required("Branch is required"),
+    questions: Yup.array()
+      .of(
+        Yup.object({
+          title: Yup.string().required("Title is required"),
+          options: Yup.array().of(
+            Yup.object({
+              value: Yup.string().required("Value is required"),
+            })
+          ),
+          answer: Yup.string().required("Answer is required"),
+        })
+      )
+      .required("Must add a question"),
   });
 
   const onSubmit = (values, options) => {
@@ -152,7 +184,7 @@ const App = () => {
               label="Quiz Description"
             />
 
-            <div className="flex flex-wrap items-center">
+            <div className="flex flex-wrap items-center gap-4">
               {/* (select) quiz semester */}
               <Select
                 id="semester"
@@ -204,6 +236,16 @@ const App = () => {
                                 />
                               </div>
                             ))}
+                          </div>
+
+                          {/* correct option */}
+                          <div>
+                            <Select
+                              id={`questions-${qIdx}-answer`}
+                              name={`questions[${qIdx}].answer`}
+                              options={correctOptionData}
+                              label="Correct answer"
+                            />
                           </div>
 
                           {/* (button) remove question */}
